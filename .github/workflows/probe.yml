@@ -41,6 +41,16 @@ jobs:
                   print(f'{name:<12} HTTP {r.status_code}  {len(r.content):>8} bytes  {time.time() - t0:5.1f}s  標記:{hint or "無"}')
               except Exception as e:
                   print(f'{name:<12} 失敗 {type(e).__name__}: {str(e)[:120]}  {time.time() - t0:5.1f}s')
+          # zco（個股主力進出）頁面結構，供解析器比對
+          r = requests.get(tests['富邦個股 zco'], headers=H, timeout=25)
+          html = r.content.decode('cp950', errors='ignore')
+          import re as _re
+          txt = _re.sub(r'\s+', ' ', _re.sub(r'<[^>]+>', ' ', html)).replace('&nbsp;', ' ')
+          for kw in ('家數', '合計', '買超', '賣超', '資料日期', '區間'):
+              for m in list(_re.finditer(kw, txt))[:3]:
+                  print(f'[zco:{kw}]', txt[max(0, m.start() - 80):m.end() + 120])
+          i = html.find('家數')
+          print('[zco:html]', html[max(0, i - 600):i + 600].replace('\n', ' ') if i >= 0 else html[:1500].replace('\n', ' '))
           import yfinance as yf
           t0 = time.time(); h = yf.download(['2330.TW', '6488.TWO'], period='5d', progress=False)
           print(f'yfinance     {h.shape}  {time.time() - t0:5.1f}s')
