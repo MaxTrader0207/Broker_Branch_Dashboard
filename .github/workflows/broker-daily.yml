@@ -1,0 +1,108 @@
+name: 券商分點每日更新
+
+on:
+  schedule:
+    # 台北時間週一～五 22:37（UTC 14:37）。融資餘額約 21:30 才公布，分點、法人更早；避開整點的排程壅塞。
+    # 假日會照跑：沒有新交易日時只是用快取重新產生同一天的報表（幾分鐘）。
+    - cron: '37 14 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: '使用模擬資料（只測流程，數字無意義）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # 每 30 天提交一次狀態檔，避免 GitHub 停用公開 repo 的排程
+  pages: write
+  id-token: write
+
+concurrency:
+  group: broker-daily
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350          # 第一次（無快取）約 2～2.5 小時；之後每天約 5～15 分鐘
+    env:
+      BROKER_RUN_MODE: ci
+      BROKER_OUTPUT_DIR: ${{ github.workspace }}/out
+      BROKER_DEMO: ${{ inputs.demo && '1' || '0' }}
+      TZ: Asia/Taipei
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: 安裝套件
+        run: pip install -r requirements.txt
+
+      - name: 還原資料快取（分點、法人、融資、股價）
+        uses: actions/cache/restore@v4
+        with:
+          path: out/_cache
+          key: broker-cache-${{ github.run_id }}
+          restore-keys: broker-cache-
+
+      - name: 執行 notebook
+        run: |
+          mkdir -p out
+          jupyter nbconvert --to notebook --execute broker_dashboard.ipynb \
+            --output-dir out --output executed.ipynb \
+            --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python3
+
+      - name: 儲存資料快取（失敗或逾時也存，下次只補缺的）
+        if: always() && !inputs.demo
+        uses: actions/cache/save@v4
+        with:
+          path: out/_cache
+          key: broker-cache-${{ github.run_id }}
+
+      - name: 保留執行紀錄（含每格輸出，除錯用）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: executed-notebook
+          path: out/executed.ipynb
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: 整理網站檔案
+        run: |
+          mkdir -p site
+          cp out/*.html site/
+          cp out/build_info.json site/
+          touch site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: 防止排程被停用（距上次提交超過 30 天才提交狀態檔）
+        if: ${{ !inputs.demo }}
+        run: |
+          last=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          if [ $((now - last)) -gt 2592000 ]; then
+            mkdir -p status && cp out/build_info.json status/build_info.json
+            git config user.name "github-actions[bot]"
+            git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+            git add status/build_info.json
+            git commit -m "chore: 每月狀態更新（維持排程啟用）"
+            git push
+          fi
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
