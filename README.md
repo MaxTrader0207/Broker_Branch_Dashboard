@@ -36,6 +36,7 @@
 ## 每次執行的產出
 
 - 網站：`index.html`（總覽）、`00_summary.html`（一頁式摘要）、`01`～`15` 子策略頁、`build_info.json`（資料日期、覆蓋率、截尾率、存活者偏誤、自我測試結果）。
+- 執行過程：Actions → 該次執行 → build → 「執行 notebook」步驟，每格輸出即時顯示（看得到抓到第幾頁、哪個資料源慢）。
 - Actions 的 artifact `executed-notebook`：含每格輸出的執行紀錄，保留 14 天，除錯用。
 
 ## 注意

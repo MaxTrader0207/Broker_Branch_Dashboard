@@ -6,3 +6,4 @@ requests>=2.31
 yfinance>=0.2.54
 nbconvert>=7.16
 ipykernel>=6.29
+papermill>=2.6

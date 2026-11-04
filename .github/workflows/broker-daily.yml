@@ -49,12 +49,11 @@ jobs:
           key: broker-cache-${{ github.run_id }}
           restore-keys: broker-cache-
 
-      - name: 執行 notebook
+      - name: 執行 notebook（每格輸出即時顯示在此步驟的紀錄）
         run: |
           mkdir -p out
-          jupyter nbconvert --to notebook --execute broker_dashboard.ipynb \
-            --output-dir out --output executed.ipynb \
-            --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python3
+          papermill broker_dashboard.ipynb out/executed.ipynb \
+            --log-output --no-progress-bar --request-save-on-cell-execute -k python3
 
       - name: 儲存資料快取（失敗或逾時也存，下次只補缺的）
         if: always() && !inputs.demo
