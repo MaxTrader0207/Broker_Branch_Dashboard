@@ -13,7 +13,7 @@ on:
         default: false
 
 permissions:
-  contents: write   # 每 30 天提交一次狀態檔，避免 GitHub 停用公開 repo 的排程
+  contents: write   # 每天提交訊號台帳（ledger/）；另每 30 天提交一次狀態檔，避免 GitHub 停用公開 repo 的排程
   pages: write
   id-token: write
 
@@ -28,6 +28,7 @@ jobs:
     env:
       BROKER_RUN_MODE: ci
       BROKER_OUTPUT_DIR: ${{ github.workspace }}/out
+      BROKER_LEDGER_DIR: ${{ github.workspace }}/ledger   # V1.7 訊號台帳：存在 repo 內，每天自動提交
       BROKER_DEMO: ${{ inputs.demo && '1' || '0' }}
       TZ: Asia/Taipei
       PYTHONUNBUFFERED: '1'
@@ -61,6 +62,19 @@ jobs:
         with:
           path: out/_cache
           key: broker-cache-${{ github.run_id }}
+
+      - name: 提交訊號台帳（ledger/ 只增不改；失敗不影響發佈，下次執行會從快取備份補回）
+        if: ${{ !inputs.demo }}
+        continue-on-error: true
+        run: |
+          if [ ! -d ledger ]; then echo "沒有台帳資料夾（LEDGER_ENABLE=False？）"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add ledger
+          if git diff --cached --quiet; then echo "台帳無變動"; exit 0; fi
+          git commit -m "ledger: $(date +%F) 訊號台帳"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: 保留執行紀錄（含每格輸出，除錯用）
         if: always()
