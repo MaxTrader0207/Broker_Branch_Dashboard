@@ -1,0 +1,66 @@
+name: 查分點代號
+
+on:
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: '關鍵字（券商或分點名稱的一部分；多個用逗號隔開，任一符合就列出）'
+        required: true
+        default: '凱基-台北'
+
+permissions:
+  contents: read
+
+jobs:
+  lookup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      KEYWORD: ${{ inputs.keyword }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: 從富邦券商清單查代號
+        shell: python
+        run: |
+          import os, re, requests
+          H = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+               'Referer': 'https://fubon-ebrokerdj.fbs.com.tw/'}
+          kws = [k.strip() for k in re.split(r'[,，、;；]', os.environ['KEYWORD']) if k.strip()]
+          txt = ''
+          for url in ('https://fubon-ebrokerdj.fbs.com.tw/z/js/zbrokerjs.djjs', 'https://fubon-ebrokerdj.fbs.com.tw/z/js/zbrokerJS.djjs'):
+              try:
+                  r = requests.get(url, headers=H, timeout=25)
+                  txt = r.content.decode('cp950', errors='ignore')
+                  if '!' in txt and ',' in txt:
+                      break
+              except Exception as e:
+                  print('抓取失敗：', url, repr(e))
+          rows = []
+          for seg in re.split(r'[;\n]', txt):
+              items = [x for x in seg.split('!') if ',' in x]
+              if not items:
+                  continue
+              m = re.findall(r'[0-9][0-9A-Za-z]{3}', items[0].split(',')[0])
+              if not m:
+                  continue
+              a = m[-1]
+              bname = re.sub(r"[\s　'\"]", '', items[0].split(',', 1)[1])
+              for it in items:
+                  code, _, nm = it.partition(',')
+                  code = re.sub(r'[^0-9A-Za-z]', '', code); nm = re.sub(r"[\s　'\"]", '', nm)
+                  if code and nm:
+                      b = code if code.isdigit() else ''.join(f'{ord(ch):04X}' for ch in code)
+                      rows.append((a, bname, code, nm, b))
+          print(f'清單共 {len(rows)} 筆（{len(set(r[0] for r in rows))} 家券商）；關鍵字：{kws}')
+          hits = [r for r in rows if any(k in r[3] or k in r[1] or k == r[0] or k == r[2] for k in kws)]
+          for a, bname, code, nm, b in hits[:300]:
+              print(f'  {nm}　→　研究工作流程請填：{nm}={a}:{b}　（券商 {a} {bname}／分點 {code}）')
+          if not hits:
+              print('  沒有符合的項目。以下是所有券商（總公司）名稱，供比對：')
+              seen = []
+              for a, bname, code, nm, b in rows:
+                  if a not in seen:
+                      seen.append(a); print(f'    {a} {bname}')
