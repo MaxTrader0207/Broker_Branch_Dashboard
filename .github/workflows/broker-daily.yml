@@ -90,6 +90,7 @@ jobs:
           mkdir -p site
           cp out/*.html site/
           cp out/build_info.json site/
+          if [ -d studies ]; then cp -r studies site/; fi   # V2.0：其他分點的研究報表
           touch site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3
