@@ -1,0 +1,66 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>券商分點量化研究 V1.8</title>
+<style>
+:root{--bg:#0a0e13;--pn:#111821;--bd:#1f2a36;--tx:#d7dee7;--mu:#7d8b99;--ac:#f0b429;--up:#ff4d4f;--dn:#22c55e;--bl:#4ea1ff}
+*{box-sizing:border-box}html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;font-size:14px;line-height:1.6}
+header{padding:20px 24px 16px;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,#121a24,#0a0e13)}
+header a{color:var(--mu);text-decoration:none;font-size:13px}header a:hover{color:var(--ac)}
+.no{display:inline-block;background:var(--ac);color:#111;font-weight:800;border-radius:6px;padding:1px 8px;margin-right:8px;font-family:ui-monospace,Menlo,Consolas,monospace}
+h1{font-size:22px;margin:8px 0 4px}h2{font-size:16px;margin:0 0 10px;color:#e8edf3}h3{font-size:14px;margin:0 0 8px;color:var(--ac)}
+.sub{color:var(--mu);margin:0}.meta{color:var(--mu);font-size:12px;margin-top:8px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.demo{background:#3a1d00;color:#ffb74d;padding:10px 24px;font-weight:700;border-bottom:1px solid #5a3200}
+main{padding:18px 24px;display:flex;flex-direction:column;gap:16px;max-width:1500px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.card{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:14px;min-width:0}
+.method{background:#0d141c;border:1px solid var(--bd);border-left:3px solid var(--ac);border-radius:8px;padding:12px 16px;color:#b9c4cf;font-size:13px}
+.method ul{margin:4px 0;padding-left:20px}.method code{color:var(--ac)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:10px 14px}
+.kl{color:var(--mu);font-size:12px}.kv{font-size:22px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}
+.tw{overflow:auto;max-height:560px;border:1px solid var(--bd);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:#16202b;color:#9fb0c0;font-weight:600;text-align:left;padding:7px 8px;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--bd);z-index:1}
+td{padding:5px 8px;border-bottom:1px solid #16202a;white-space:nowrap}
+tr:hover td{background:#152030}
+td.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace}
+.up{color:var(--up)}.dn{color:var(--dn)}.mu{color:var(--mu)}.ok{color:var(--up);font-weight:700}.ng{color:#4b5866}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.u{background:rgba(255,77,79,.15);color:#ff7a7c}.pill.d{background:rgba(34,197,94,.15);color:#4ade80}.pill.n{background:rgba(240,180,41,.15);color:#f5c451}.pill.g{background:#1d2732;color:#9fb0c0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}.tabs button,select{background:#16202b;color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}
+.ch{position:relative;height:300px}.ch.sm{height:180px}.ch.lg{height:420px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.note{color:var(--mu);font-size:12px}
+footer{padding:16px 24px 28px;color:var(--mu);font-size:12px;border-top:1px solid var(--bd);max-width:1500px;margin:0 auto}
+@media(max-width:640px){main,header{padding-left:12px;padding-right:12px}.kv{font-size:18px}}
+
+.ic{text-decoration:none;color:inherit;display:block;transition:border-color .15s}.ic:hover{border-color:var(--ac)}.sumlink{border-color:var(--ac);background:linear-gradient(90deg,rgba(240,180,41,.12),var(--pn))}.hl{color:var(--ac);font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}</style></head><body>
+<header><h1>券商分點 V2.0 量化研究模型（研究模式）</h1><p class="sub">15 個子策略獨立 Dashboard ｜ 分點：港商野村</p>
+<div class="meta">資料日期 2026-11-13 ｜ 期間 2023-11-16 ～ 2026-11-13（725 日）｜ 股票池 1310 檔 ｜ 分點日覆蓋 100.0%（最新日 1/1）｜ 產生 2026-11-16 02:29</div></header>
+
+<main><section class="method"><h3>研究流程</h3>股票代碼 → 抓取券商分點 → 5/10/20/60 日 → 分點買賣超 → 主力集中度 → 主力成本 → 隔日沖辨識 → 吸籌/出貨辨識 → 主力轉向 → 外資/投信 → 融資融券 → MA/RSI/成交量 → 主力籌碼分數 0～100（規則版＋ML 版）→ 回測未來 5/10/20 日 → 勝率/平均報酬/最大回撤/資金規模滑價<br><br><b>V1.1 優化重點：</b>動態流動性門檻、EMA 加權與族群建倉、FIFO/LIFO＋時間衰減成本、KDE 成本密集區、T+2/T+3 短沖特徵、K-Means 主力分群、扣當沖的留倉集中度、全市場家數差、隱性吸籌、散戶接盤、ATR／成本區防守線、PCA 降維、walk-forward ML Score、Z-Score 軟性選股、資金規模滑價回測。<br><br><b>V1.7 驗證層：</b>S16 訊號台帳（每天存檔當日訊號、事後回填報酬，唯一真正的樣本外驗證）、S17 消融測試（逐一關掉各項優化，看哪些真的有用）。<br><b>V1.8：</b>0050 含息基準、出場規則與大盤濾網對照（S15）、流動性／多空頭穩健性與分點加權（S17）、資料健康檢查（本頁下方）。<br><br><b>最重要的觀念：</b>不要把「某分點買超」直接等於「主力買進」。分點資料 → 行為特徵 → 量化因子 → 回測 → 找出具有統計優勢的條件。</section>
+<a class="card ic sumlink" href="00_summary.html"><h2 style="margin:0">📋 一頁式重點摘要 →</h2><p class="note" style="margin:4px 0 0">15 個策略的今日重點與多訊號共振個股，一頁看完（可列印）</p></a>
+<div class="grid"><a class="card ic" href="01_net_buy_sell.html"><div class="row" style="margin:0"><span class="no">S01</span><span class="mu">第一層</span></div>
+<h2 style="margin:8px 0 4px">分點買賣超</h2><p class="note" style="margin:0 0 8px">誰在買？誰在賣？從單日到 20 日累積</p><div class="hl">今日共 15 筆分點買超、6 個族群建倉</div></a><a class="card ic" href="02_branch_strength.html"><div class="row" style="margin:0"><span class="no">S02</span><span class="mu">第二層</span></div>
+<h2 style="margin:8px 0 4px">持續性主力・分點強度分數</h2><p class="note" style="margin:0 0 8px">從「看資料」變成量化選股因子（0～100）</p><div class="hl">70 檔強度 ≥80</div></a><a class="card ic" href="03_cost_zone.html"><div class="row" style="margin:0"><span class="no">S03</span><span class="mu">第三層</span></div>
+<h2 style="margin:8px 0 4px">主力成本區估算</h2><p class="note" style="margin:0 0 8px">庫存法估算分點持倉成本（含賣出扣減），判斷被套、成本附近或獲利了結風險</p><div class="hl">150 組有庫存、14 組獲利了結風險</div></a><a class="card ic" href="04_cost_density.html"><div class="row" style="margin:0"><span class="no">S04</span><span class="mu">第四層</span></div>
+<h2 style="margin:8px 0 4px">主力成本密集區</h2><p class="note" style="margin:0 0 8px">成本分布直方圖與成本區突破延續性</p><div class="hl">12 檔突破成本區</div></a><a class="card ic" href="05_day_trade.html"><div class="row" style="margin:0"><span class="no">S05</span><span class="mu">第五層</span></div>
+<h2 style="margin:8px 0 4px">隔日沖券商辨識</h2><p class="note" style="margin:0 0 8px">今日大量買進 → 隔日大量賣出</p><div class="hl">15 則今日警報</div></a><a class="card ic" href="06_player_type.html"><div class="row" style="margin:0"><span class="no">S06</span><span class="mu">第六層</span></div>
+<h2 style="margin:8px 0 4px">長線／短線主力類型分類</h2><p class="note" style="margin:0 0 8px">波段、趨勢、短線、隔日沖、高周轉</p><div class="hl">91 組波段/趨勢主力；最佳機器群：高周轉群C（前後皆正）</div></a><a class="card ic" href="07_concentration.html"><div class="row" style="margin:0"><span class="no">S07</span><span class="mu">第七層</span></div>
+<h2 style="margin:8px 0 4px">分點集中度</h2><p class="note" style="margin:0 0 8px">少數分點大量交易＝籌碼集中</p><div class="hl">0 檔中度以上集中</div></a><a class="card ic" href="08_breadth.html"><div class="row" style="margin:0"><span class="no">S08</span><span class="mu">第八層</span></div>
+<h2 style="margin:8px 0 4px">買賣家數差</h2><p class="note" style="margin:0 0 8px">買方集中、賣方分散 vs 市場買盤廣泛</p><div class="hl">0 檔買方集中、賣方分散</div></a><a class="card ic" href="09_accumulation.html"><div class="row" style="margin:0"><span class="no">S09</span><span class="mu">第九層</span></div>
+<h2 style="margin:8px 0 4px">吸籌偵測</h2><p class="note" style="margin:0 0 8px">股價沒大漲、量增、分點持續吸收賣單</p><div class="hl">1 檔吸籌、0 檔疑似</div></a><a class="card ic" href="10_distribution.html"><div class="row" style="margin:0"><span class="no">S10</span><span class="mu">第十層</span></div>
+<h2 style="margin:8px 0 4px">出貨偵測</h2><p class="note" style="margin:0 0 8px">股價強、原買方轉賣、爆大量</p><div class="hl">36 檔出貨警報</div></a><a class="card ic" href="11_reversal.html"><div class="row" style="margin:0"><span class="no">S11</span><span class="mu">第十一層</span></div>
+<h2 style="margin:8px 0 4px">主力反轉訊號</h2><p class="note" style="margin:0 0 8px">主力轉空警報 ／ 籌碼反轉</p><div class="hl">今日 13 則反轉訊號</div></a><a class="card ic" href="12_behavior_matrix.html"><div class="row" style="margin:0"><span class="no">S12</span><span class="mu">第十二層</span></div>
+<h2 style="margin:8px 0 4px">主力行為矩陣</h2><p class="note" style="margin:0 0 8px">13 個數值因子一次看</p><div class="hl">100 檔；前 3 成分解釋 59% 變異</div></a><a class="card ic" href="13_chip_score.html"><div class="row" style="margin:0"><span class="no">S13</span><span class="mu">第十三層</span></div>
+<h2 style="margin:8px 0 4px">主力籌碼 Score</h2><p class="note" style="margin:0 0 8px">八大構面加權評分 0～100</p><div class="hl">3 檔強勢主力布局</div></a><a class="card ic" href="14_stock_funnel.html"><div class="row" style="margin:0"><span class="no">S14</span><span class="mu">第十四層</span></div>
+<h2 style="margin:8px 0 4px">分點量化選股漏斗</h2><p class="note" style="margin:0 0 8px">籌碼＋技術 選股模型</p><div class="hl">0 檔全數通過、46 檔軟性入選</div></a><a class="card ic" href="15_factor_backtest.html"><div class="row" style="margin:0"><span class="no">S15</span><span class="mu">第十五層</span></div>
+<h2 style="margin:8px 0 4px">十大分點因子 × 回測驗證</h2><p class="note" style="margin:0 0 8px">勝率／平均報酬／最大回撤</p><div class="hl">10日顯著超額最高：④連續買超≥3日 +0.46%（t=3.0）</div></a><a class="card ic" href="16_signal_ledger.html"><div class="row" style="margin:0"><span class="no">S16</span><span class="mu">驗證</span></div>
+<h2 style="margin:8px 0 4px">訊號台帳（實盤樣本外追蹤）</h2><p class="note" style="margin:0 0 8px">每日存檔當日訊號 → 事後回填報酬 → 與回測對照</p><div class="hl">今日起開始記錄</div></a><a class="card ic" href="17_ablation.html"><div class="row" style="margin:0"><span class="no">S17</span><span class="mu">驗證</span></div>
+<h2 style="margin:8px 0 4px">消融測試（哪些優化真的有用）</h2><p class="note" style="margin:0 0 8px">逐一關掉各項優化 → 比較 Rank IC／組合績效／因子超額</p><div class="hl">0 項現行較佳、0 項建議還原、8 項無差異或不影響 Score</div></a><a class="card ic" href="18_branch_follow.html"><div class="row" style="margin:0"><span class="no">S18</span><span class="mu">驗證</span></div>
+<h2 style="margin:8px 0 4px">單一分點跟單回測</h2><p class="note" style="margin:0 0 8px">每個分點各自回測：買超／賣超後隔日開盤跟進，0～20 日的報酬、分組、跟單組合</p><div class="hl">1 個分點；樣本內最佳：港商野村・持有 10 日 +107%（保留期 -26%）</div></a></div>
+
+<details class="card"><summary style="cursor:pointer"><b>🩺 資料健康檢查</b>　<span class="mu">9 項正常</span></summary>
+<div class="tw" style="margin-top:10px"><table><thead><tr><th>資料源</th><th>狀態</th><th>最新日期</th><th>落後交易日</th><th>最新日筆數／檔數</th><th>說明</th></tr></thead><tbody><tr><td>分點：港商野村</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">145</td><td class="note">近 20 日中位數 141 筆</td></tr><tr><td>股價（yfinance）</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">1,365</td><td class="note">最新日有收盤價 100%；抓不到股價的普通股 10 檔</td></tr><tr><td>官方收盤行情（TWSE／TPEx 備援）</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">7,467</td><td class="note">上市 1377、上櫃 6090 檔；與 Yahoo 收盤相符 100.0%</td></tr><tr><td>基準 0050</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">—</td><td class="note">含息還原價；大盤濾網與基準比較用</td></tr><tr><td>外資／投信（T86＋TPEx）</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">1,353</td><td class="note">最新日有資料的檔數</td></tr><tr><td>融資餘額</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">1,353</td><td class="note">融資約 21:30 後公布，較早執行會落後 1 日</td></tr><tr><td>當沖成交量（TWSE）</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">845</td><td class="note">缺的日子以歷史當沖占比估計</td></tr><tr><td>零股成交（S10）</td><td><span class="pill d">正常</span></td><td>2026-11-13</td><td class="num">0</td><td class="num">1,381</td><td class="note">抓不到時 S10 零股條件顯示 N/A</td></tr><tr><td>產業別（S01 族群）</td><td><span class="pill d">正常</span></td><td>—</td><td class="num">—</td><td class="num">897</td><td class="note">抓不到時 S01 族群全部歸為「未分類」</td></tr></tbody></table></div></details></main>
+<footer>研究用途，不構成投資建議。</footer></body></html>
