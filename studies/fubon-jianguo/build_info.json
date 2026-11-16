@@ -1,8 +1,8 @@
 {
  "data_date": "2026-11-13",
- "generated": "2026-11-15 20:56",
+ "generated": "2026-11-16 12:04",
  "demo": false,
- "days": 726,
+ "days": 725,
  "branches": [
   "富邦-建國"
  ],
@@ -11,7 +11,7 @@
  "trunc_cut_lots": {
   "富邦-建國": 30.0
  },
- "survivorship_share": 0.0164,
+ "survivorship_share": 0.0163,
  "self_test": true,
  "ledger": {
   "enabled": false,
@@ -32,7 +32,7 @@
   },
   {
    "src": "股價（yfinance）",
-   "last": "2026-11-13",
+   "last": "2026-11-16",
    "lag": 0,
    "n": 1772,
    "st": "正常",
@@ -46,11 +46,11 @@
    "n": 7467,
    "st": "正常",
    "sc": "d",
-   "note": "上市 1377、上櫃 6090 檔；與 Yahoo 收盤相符 100.0%"
+   "note": "上市 1377、上櫃 6090 檔；與 Yahoo 收盤相符 100.0%；已補 1 格缺價"
   },
   {
    "src": "基準 0050",
-   "last": "2026-11-13",
+   "last": "2026-11-16",
    "lag": 0,
    "n": null,
    "st": "正常",
