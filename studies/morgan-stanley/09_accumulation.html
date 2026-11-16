@@ -39,7 +39,7 @@ footer{padding:16px 24px 28px;color:var(--mu);font-size:12px;border-top:1px soli
 @media(max-width:640px){main,header{padding-left:12px;padding-right:12px}.kv{font-size:18px}}
 </style></head><body>
 <header><a href="index.html">← 回總覽</a><h1><span class="no">S09</span>吸籌偵測</h1><p class="sub">股價沒大漲、量增、分點持續吸收賣單</p>
-<div class="meta">資料日期 2026-11-13 ｜ 期間 2023-11-15 ～ 2026-11-13（726 日） ｜ 追蹤分點 台灣摩根士丹利 ｜ 分點日覆蓋 100.0%（最新日 1/1） ｜ Top50 截尾 門檻約 348 張 ｜ 產生 2026-11-15 22:48</div></header>
+<div class="meta">資料日期 2026-11-13 ｜ 期間 2023-11-16 ～ 2026-11-13（725 日） ｜ 追蹤分點 台灣摩根士丹利 ｜ 分點日覆蓋 100.0%（最新日 1/1） ｜ Top50 截尾 門檻約 348 張 ｜ 產生 2026-11-16 12:39</div></header>
 
 <main><section class="method"><h3>策略邏輯（對應文件第 九 層）</h3>股價沒有大漲，但特定分點持續吸收賣單 → 可能形成低檔吸籌。六個條件：
 <ul><li>① 股價持平：20 日漲跌在 ±max(5%, 0.7×20日波動) 內，且 10 日振幅 ≤ max(8%, 1.5×10日波動)。門檻隨個股 60 日波動度調整，避免高波動股永遠不符合、低波動股過度寬鬆；價格用還原價，除息不影響判斷</li><li>② 成交量逐步增加：5 日均量 ÷ 20 日均量 ≥ 1.1</li>
