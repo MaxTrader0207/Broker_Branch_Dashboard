@@ -38,7 +38,7 @@ jobs:
                       break
               except Exception as e:
                   print('抓取失敗：', url, repr(e))
-          rows = []
+          rows = []; seen_rows = set()
           for seg in re.split(r'[;\n]', txt):
               items = [x for x in seg.split('!') if ',' in x]
               if not items:
@@ -52,8 +52,13 @@ jobs:
                   code, _, nm = it.partition(',')
                   code = re.sub(r'[^0-9A-Za-z]', '', code); nm = re.sub(r"[\s　'\"]", '', nm)
                   if code and nm:
-                      b = code if code.isdigit() else ''.join(f'{ord(ch):04X}' for ch in code)
-                      rows.append((a, bname, code, nm, b))
+                      # 清單裡含英文字母的分點代號已經是編碼後的形式（0039003600310043 = 961C），不可再編一次
+                      if re.fullmatch(r'(?:00[0-9A-Fa-f]{2}){4,}', code):
+                          b = code.upper(); shown = ''.join(chr(int(b[i:i + 4], 16)) for i in range(0, len(b), 4))
+                      else:
+                          b = code if code.isdigit() else ''.join(f'{ord(ch):04X}' for ch in code); shown = code
+                      if (a, shown, nm) not in seen_rows:
+                          seen_rows.add((a, shown, nm)); rows.append((a, bname, shown, nm, b))
           print(f'清單共 {len(rows)} 筆（{len(set(r[0] for r in rows))} 家券商）；關鍵字：{kws}')
           hits = [r for r in rows if any(k in r[3] or k in r[1] or k == r[0] or k == r[2] for k in kws)]
           for a, bname, code, nm, b in hits[:300]:
