@@ -1,0 +1,128 @@
+{
+ "data_date": "2026-11-13",
+ "generated": "2026-11-16 10:45",
+ "demo": false,
+ "days": 725,
+ "branches": [
+  "花旗環球"
+ ],
+ "coverage": 1.0,
+ "latest_branches": 1,
+ "trunc_cut_lots": {
+  "花旗環球": 51.0
+ },
+ "survivorship_share": 0.0162,
+ "self_test": true,
+ "ledger": {
+  "enabled": false,
+  "days": 0,
+  "matured": 0,
+  "recorded_today": false,
+  "dir": "/home/runner/work/Broker_Branch_Dashboard/Broker_Branch_Dashboard/out/_ledger_demo"
+ },
+ "health": [
+  {
+   "src": "分點：花旗環球",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 129,
+   "st": "正常",
+   "sc": "d",
+   "note": "近 20 日中位數 132 筆"
+  },
+  {
+   "src": "股價（yfinance）",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 1184,
+   "st": "正常",
+   "sc": "d",
+   "note": "最新日有收盤價 100%；抓不到股價的普通股 11 檔"
+  },
+  {
+   "src": "官方收盤行情（TWSE／TPEx 備援）",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 7467,
+   "st": "正常",
+   "sc": "d",
+   "note": "上市 1377、上櫃 6090 檔；與 Yahoo 收盤相符 100.0%"
+  },
+  {
+   "src": "基準 0050",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": null,
+   "st": "正常",
+   "sc": "d",
+   "note": "含息還原價；大盤濾網與基準比較用"
+  },
+  {
+   "src": "外資／投信（T86＋TPEx）",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 1176,
+   "st": "正常",
+   "sc": "d",
+   "note": "最新日有資料的檔數"
+  },
+  {
+   "src": "融資餘額",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 1173,
+   "st": "正常",
+   "sc": "d",
+   "note": "融資約 21:30 後公布，較早執行會落後 1 日"
+  },
+  {
+   "src": "當沖成交量（TWSE）",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 822,
+   "st": "正常",
+   "sc": "d",
+   "note": "缺的日子以歷史當沖占比估計"
+  },
+  {
+   "src": "零股成交（S10）",
+   "last": "2026-11-13",
+   "lag": 0,
+   "n": 1381,
+   "st": "正常",
+   "sc": "d",
+   "note": "抓不到時 S10 零股條件顯示 N/A"
+  },
+  {
+   "src": "產業別（S01 族群）",
+   "last": null,
+   "lag": null,
+   "n": 897,
+   "st": "正常",
+   "sc": "d",
+   "note": "抓不到時 S01 族群全部歸為「未分類」"
+  }
+ ],
+ "price_cov_last": 1.0,
+ "ablation_computed": "2026-11-16 10:44",
+ "pages": [
+  "01_net_buy_sell.html",
+  "02_branch_strength.html",
+  "03_cost_zone.html",
+  "04_cost_density.html",
+  "05_day_trade.html",
+  "06_player_type.html",
+  "07_concentration.html",
+  "08_breadth.html",
+  "09_accumulation.html",
+  "10_distribution.html",
+  "11_reversal.html",
+  "12_behavior_matrix.html",
+  "13_chip_score.html",
+  "14_stock_funnel.html",
+  "15_factor_backtest.html",
+  "16_signal_ledger.html",
+  "17_ablation.html",
+  "18_branch_follow.html"
+ ]
+}
