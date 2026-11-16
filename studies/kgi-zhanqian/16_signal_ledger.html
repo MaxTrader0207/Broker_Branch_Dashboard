@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>訊號台帳（實盤樣本外追蹤）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0e13;--pn:#111821;--bd:#1f2a36;--tx:#d7dee7;--mu:#7d8b99;--ac:#f0b429;--up:#ff4d4f;--dn:#22c55e;--bl:#4ea1ff}
+*{box-sizing:border-box}html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;font-size:14px;line-height:1.6}
+header{padding:20px 24px 16px;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,#121a24,#0a0e13)}
+header a{color:var(--mu);text-decoration:none;font-size:13px}header a:hover{color:var(--ac)}
+.no{display:inline-block;background:var(--ac);color:#111;font-weight:800;border-radius:6px;padding:1px 8px;margin-right:8px;font-family:ui-monospace,Menlo,Consolas,monospace}
+h1{font-size:22px;margin:8px 0 4px}h2{font-size:16px;margin:0 0 10px;color:#e8edf3}h3{font-size:14px;margin:0 0 8px;color:var(--ac)}
+.sub{color:var(--mu);margin:0}.meta{color:var(--mu);font-size:12px;margin-top:8px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.demo{background:#3a1d00;color:#ffb74d;padding:10px 24px;font-weight:700;border-bottom:1px solid #5a3200}
+main{padding:18px 24px;display:flex;flex-direction:column;gap:16px;max-width:1500px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.card{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:14px;min-width:0}
+.method{background:#0d141c;border:1px solid var(--bd);border-left:3px solid var(--ac);border-radius:8px;padding:12px 16px;color:#b9c4cf;font-size:13px}
+.method ul{margin:4px 0;padding-left:20px}.method code{color:var(--ac)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:10px 14px}
+.kl{color:var(--mu);font-size:12px}.kv{font-size:22px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}
+.tw{overflow:auto;max-height:560px;border:1px solid var(--bd);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:#16202b;color:#9fb0c0;font-weight:600;text-align:left;padding:7px 8px;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--bd);z-index:1}
+td{padding:5px 8px;border-bottom:1px solid #16202a;white-space:nowrap}
+tr:hover td{background:#152030}
+td.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace}
+.up{color:var(--up)}.dn{color:var(--dn)}.mu{color:var(--mu)}.ok{color:var(--up);font-weight:700}.ng{color:#4b5866}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.u{background:rgba(255,77,79,.15);color:#ff7a7c}.pill.d{background:rgba(34,197,94,.15);color:#4ade80}.pill.n{background:rgba(240,180,41,.15);color:#f5c451}.pill.g{background:#1d2732;color:#9fb0c0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}.tabs button,select{background:#16202b;color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}
+.ch{position:relative;height:300px}.ch.sm{height:180px}.ch.lg{height:420px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.note{color:var(--mu);font-size:12px}
+footer{padding:16px 24px 28px;color:var(--mu);font-size:12px;border-top:1px solid var(--bd);max-width:1500px;margin:0 auto}
+@media(max-width:640px){main,header{padding-left:12px;padding-right:12px}.kv{font-size:18px}}
+</style></head><body>
+<header><a href="index.html">← 回總覽</a><h1><span class="no">S16</span>訊號台帳（實盤樣本外追蹤）</h1><p class="sub">每日存檔當日訊號 → 事後回填報酬 → 與回測對照</p>
+<div class="meta">資料日期 2026-11-13 ｜ 期間 2023-11-16 ～ 2026-11-13（725 日） ｜ 追蹤分點 凱基-站前 ｜ 分點日覆蓋 100.0%（最新日 1/1） ｜ Top50 截尾 門檻約 30 張 ｜ 產生 2026-11-16 11:01</div></header>
+
+<main><section class="method"><h3>方法說明</h3>S15 的回測再嚴謹，用的仍是「事後才定義」的規則去看歷史；參數、門檻、因子都是看過這段資料後才決定的。<b>訊號台帳</b>是唯一沒有這個問題的驗證：
+<ul><li><b>每天存檔</b>：每次執行把最新交易日每檔股票的 Score、ML Score、十大因子是否成立、S14 漏斗／軟性入選、S09 吸籌、S10 出貨、摘要頁的偏多／偏空共振，寫成一個 CSV（<code>ledger/年/日期.csv</code>）。
+<b>只增不改</b>：同一天重跑不會覆寫（除非先前有分點缺資料、這次補齊）。</li>
+<li><b>事後回填</b>：之後每天用最新股價計算這些訊號的 5／10／20 日報酬（訊號日隔日收盤進場、還原價，與 S15 定義相同）。滿 21 個交易日、20 日結果已知後，把結果寫回該檔並定案，之後不再變動。</li>
+<li><b>統計</b>：同日超額＝個股報酬 − 當天台帳內所有股票平均；進場日收漲停（≥ 9.5%，買不到）排除；t 值用間隔 ≥ h 個工作天的不重疊抽樣（獨立樣本），獨立樣本 ≥ 8 且 |t| 超過 t 分布 5% 臨界值才標「顯著」。
+有 10 日結果的訊號日未滿 <code>LEDGER_MIN_DAYS</code>（20）一律標「樣本不足」。</li>
+<li><b>資料不全不記錄</b>（V1.8.2）：當日有收盤價的股票不到一半時不寫入台帳；既有檔案若明顯殘缺（檔數不到重跑時的一半）會被取代；記錄時股價覆蓋率不到一半（舊記錄則為不到 50 檔）的訊號日標「資料不全」，不計入統計。</li>
+<li><b>股票池</b>（V1.9）：自 V1.9 起台帳只記錄每日流動性前 300 名（<code>UNIVERSE_LIQ</code>）。在此之前的記錄包含所有股票，「同日超額」的比較基準不同；<code>index.json</code> 的版本欄可區分。</li>
+<li><b>事前記錄才算數</b>：記錄時間若晚於訊號日隔日 13:30（已過進場點），該日標「逾時記錄」，不計入統計。</li>
+<li>S14 軟性入選、S09 吸籌、S10 出貨、偏多／偏空共振這幾項<b>在 S15 沒有回測</b>（它們是當日判定、沒有歷史面板），台帳是它們第一次被驗證。</li>
+<li>排程模式下台帳存在 repo 的 <code>ledger/</code>（每天自動提交）並在快取留一份備份；Colab 模式存雲端硬碟。模擬資料寫到獨立暫存資料夾，不會動到真實台帳。</li>
+<li>⚠️ 前 20 個訊號日只累積資料；之後先看「方向是否與回測一致」，要約 4 個月（10 日報酬 8 個獨立樣本）才可能達到統計顯著。期間若修改策略參數，新舊訊號會混在一起（<code>index.json</code> 記有每日的參數簽章可供區分）。</li></ul></section>
+
+<div class="kpis" id="k"></div>
+<div class="card"><h2>各訊號：實盤記錄 vs 回測</h2><div class="row"><div class="tabs" id="tb"></div><span class="note" id="nt"></span></div><div id="t1"></div></div>
+<div class="grid"><div class="card"><h2>實盤 vs 回測：10 日同日超額</h2><div class="ch lg"><canvas id="c1"></canvas></div></div>
+<div class="card"><h2 id="c2h">累積超額（每日訊號等權）</h2><p class="note">每個訊號日的平均同日超額逐日累加；各日持有期互相重疊，<b>不是可交易的淨值</b>，只用來看方向與穩定度。</p><div class="ch"><canvas id="c2"></canvas></div></div></div>
+<div class="card"><h2>台帳紀錄（最近 120 個訊號日）</h2><div id="t2"></div></div></main>
+<footer>限制說明：分點資料為「交易通路」而非最終投資人身分；每分點每日只列出買超、賣超各前 50 名，未上榜者以 0 作截尾代理，並非證實零交易；整個分點日缺漏保留缺失。成本與庫存僅是淨流量代理、初始庫存未知；買進價已依除權息換算為還原價尺度（以最新交易日價格表示）。V1.2 為程式稽核修正候選，尚未通過真實資料樣本外績效驗證。外資／投信／融資：上市取自 TWSE、上櫃取自 TPEx（TPEx 抓取失敗時上櫃顯示 N/A 並在評分中給中性分）；上櫃當沖量為估計值。本頁僅供研究，不構成投資建議。</footer>
+<script>const D={"rows": [], "days": [], "icm": null, "ict": null, "ick": 0, "mlm": null, "mlt": null, "cum": {"d": [], "top": [], "s80": []}, "nd": 0, "nm": 0, "mind": 20, "first": null, "on": false, "topn": 5, "today": false, "late": 0};
+
+const UP='#ff4d4f',DN='#22c55e',AC='#f0b429',BL='#4ea1ff',MU='#7d8b99',GR='#1a2430';
+const fmtN=(v,d=0)=>v==null||!isFinite(v)?'—':Number(v).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtP=(v,d=1)=>v==null||!isFinite(v)?'—':(v*100).toFixed(d)+'%';
+const cls=v=>v>0?'up':v<0?'dn':'';
+const sc=v=>v>=0?UP:DN;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function kpis(id,items){$(id).innerHTML=items.map(x=>`<div class="kpi"><div class="kl">${x[0]}</div><div class="kv ${x[2]||''}">${x[1]}</div></div>`).join('')}
+function table(id,cols,rows,opt={}){
+  const el=$(id);let sk=opt.sort||null,sd=opt.asc?1:-1;const H={};
+  cols.forEach(c=>{if(c.heat){const v=rows.map(r=>r[c.k]).filter(x=>x!=null&&isFinite(x));H[c.k]=v.length?[Math.min(...v),Math.max(...v)]:[0,1]}});
+  const cell=(c,r)=>{const v=r[c.k];let s,cl='',st='',num=['n','p','f'].includes(c.f);
+    if(c.f==='n')s=fmtN(v,c.d||0);else if(c.f==='p')s=fmtP(v,c.d??1);else if(c.f==='f')s=fmtN(v,c.d??2);
+    else if(c.f==='tag')s=v?`<span class="pill ${r[c.tc]||c.tone||'n'}">${esc(v)}</span>`:'<span class=mu>—</span>';
+    else if(c.f==='ck')s=v===true?'<span class=ok>✓</span>':v===false?'<span class=ng>✗</span>':'<span class=mu>N/A</span>';
+    else s=(v==null||v==='')?'—':esc(v);
+    if(c.c)cl=cls(v);
+    if(c.heat&&v!=null&&isFinite(v)){const[lo,hi]=H[c.k];
+      if(c.heat==='pos'){const a=hi>lo?(v-lo)/(hi-lo)*0.5:0.25;st=`background:rgba(240,180,41,${a.toFixed(2)})`}
+      else{const m=Math.max(Math.abs(lo),Math.abs(hi))||1;const a=Math.min(Math.abs(v)/m,1)*0.5;st=`background:${v>=0?'rgba(255,77,79,':'rgba(34,197,94,'}${a.toFixed(2)})`}}
+    return `<td class="${num?'num ':''}${cl}" style="${st}">${s}</td>`};
+  const render=()=>{let rs=[...rows];if(sk)rs.sort((a,b)=>{const x=a[sk],y=b[sk];if(x==null)return 1;if(y==null)return -1;return(x>y?1:x<y?-1:0)*sd});
+    el.innerHTML=`<div class="tw" style="${opt.h?'max-height:'+opt.h+'px':''}"><table><thead><tr>${cols.map(c=>`<th data-k="${c.k}" title="${c.tip||''}">${c.t}${sk===c.k?(sd>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead><tbody>${rs.length?rs.map(r=>`<tr>${cols.map(c=>cell(c,r)).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" class="mu">（無符合資料）</td></tr>`}</tbody></table></div>`;
+    el.querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sk===k)sd=-sd;else{sk=k;sd=-1}render()})};
+  render()}
+const CH={};
+function mk(id,cfg){if(typeof Chart==='undefined'){$(id).parentNode.innerHTML='<p class=note>圖表函式庫未載入（需要網路）</p>';return}
+  if(CH[id])CH[id].destroy();const o=cfg.options||{};o.responsive=true;o.maintainAspectRatio=false;o.animation=false;
+  o.plugins=Object.assign({legend:{labels:{color:'#9fb0c0',boxWidth:12}}},o.plugins||{});
+  if(!o.scales&&cfg.type!=='doughnut'&&cfg.type!=='pie')o.scales={x:ax(),y:ax()};
+  cfg.options=o;CH[id]=new Chart($(id),cfg);return CH[id]}
+function ax(e){return Object.assign({ticks:{color:MU,maxRotation:0,autoSkip:true},grid:{color:GR}},e||{})}
+function sel(id,opts,cb){const s=$(id);s.innerHTML=opts.map(o=>`<option value="${esc(o[0])}">${esc(o[1])}</option>`).join('');s.onchange=()=>cb(s.value);if(opts.length)cb(opts[0][0])}
+function tabs(id,names,cb){const el=$(id);el.innerHTML=names.map((n,i)=>`<button data-i="${i}" class="${i?'':'on'}">${n}</button>`).join('');
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{el.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cb(names[+b.dataset.i])});if(names.length)cb(names[0])}
+function cum(a){let s=0;return a.map(v=>s+=(v||0))}
+
+
+kpis('k',[['已記錄訊號日',D.nd],['已有 10 日結果',D.nm,D.nm>=D.mind?'up':''],['今日是否新增',D.today?'是':'否（已記錄過）'],['起始日',D.first||'—'],
+ ['實盤 Rank IC（Score）',fmtN(D.icm,3),cls(D.icm)],['IC t 值（獨立樣本 '+D.ick+'）',fmtN(D.ict,2)],['實盤 Rank IC（ML）',fmtN(D.mlm,3),cls(D.mlm)],['ML IC t 值',fmtN(D.mlt,2)],['逾時記錄日數',D.late]]);
+$('nt').textContent=!D.on?'⚠️ LEDGER_ENABLE=False：今日未記錄，只顯示既有台帳。':D.nd===0?'台帳剛啟用，還沒有任何記錄。':D.nm<D.mind?`已累積 ${D.nm} 個有 10 日結果的訊號日，未滿 ${D.mind} 日前所有判定都標「樣本不足」，請勿據此調整策略。`:'「顯著」= 獨立樣本 ≥ 8 且 |t| 超過 t 分布 5% 臨界值（訊號日互相重疊，10 日報酬約每 10 個交易日才有 1 個獨立樣本，所以要約 4 個月才可能出現）；超額＝個股報酬 − 同日台帳內全部股票平均；進場日收漲停（買不到）的訊號已排除。';
+function show(h){table('t1',[{k:'f',t:'訊號'},{k:'v',t:'判定(10日)',f:'tag',tc:'vc'},{k:'rec',t:'已記錄筆數',f:'n'},{k:'d'+h,t:'有結果的訊號日',f:'n'},{k:'n'+h,t:'有結果筆數',f:'n'},{k:'w'+h,t:h+'日勝率',f:'p',heat:'pos'},{k:'a'+h,t:h+'日平均報酬',f:'p',d:2,c:1},{k:'e'+h,t:'實盤同日超額',f:'p',d:2,c:1,heat:1},{k:'t'+h,t:'t 值',f:'f',d:2,c:1},{k:'k'+h,t:'獨立樣本',f:'n',tip:'間隔 ≥ 持有天數的不重疊訊號日數'},{k:'b10',t:'回測 10日超額',f:'p',d:2,c:1},{k:'same',t:'方向一致',f:'ck'}],D.rows,{sort:null})}
+tabs('tb',['10','5','20'],h=>show(+h));
+const R=D.rows.filter(r=>r.e10!=null||r.b10!=null);
+mk('c1',{type:'bar',data:{labels:R.map(r=>r.f),datasets:[{label:'實盤',data:R.map(r=>r.e10),backgroundColor:UP},{label:'回測',data:R.map(r=>r.b10),backgroundColor:'#33465a'}]},
+ options:{indexAxis:'y',scales:{x:ax({ticks:{color:MU,callback:v=>fmtP(v,1)}}),y:ax()}}});
+$('c2h').textContent=`累積 ${D.cum.h||''} 日同日超額（每日訊號等權）`;
+mk('c2',{type:'line',data:{labels:D.cum.d,datasets:[{label:`Score≥50 前 ${D.topn} 名`,data:D.cum.top,borderColor:UP,pointRadius:0},{label:'Score≥65 全部',data:D.cum.s80,borderColor:AC,pointRadius:0}]},
+ options:{scales:{x:ax(),y:ax({ticks:{color:MU,callback:v=>fmtP(v,0)}})}}});
+table('t2',[{k:'date',t:'訊號日'},{k:'st',t:'狀態',f:'tag',tc:'sc'},{k:'at',t:'記錄時間'},{k:'cov',t:'分點覆蓋'},{k:'n',t:'股票數',f:'n'},{k:'top',t:`當日 Score 前 ${D.topn} 名`},{k:'x5',t:'5日超額',f:'p',d:2,c:1},{k:'x10',t:'10日超額',f:'p',d:2,c:1},{k:'x20',t:'20日超額',f:'p',d:2,c:1}],D.days,{sort:null,h:520});</script></body></html>
