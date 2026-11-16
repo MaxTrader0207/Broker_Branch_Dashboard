@@ -1,15 +1,15 @@
 {
  "data_date": "2026-11-13",
- "generated": "2026-11-15 22:08",
+ "generated": "2026-11-16 12:28",
  "demo": false,
- "days": 726,
+ "days": 725,
  "branches": [
   "新加坡商瑞銀"
  ],
  "coverage": 1.0,
  "latest_branches": 1,
  "trunc_cut_lots": {
-  "新加坡商瑞銀": 338.5
+  "新加坡商瑞銀": 338.0
  },
  "survivorship_share": 0.0197,
  "self_test": true,
@@ -32,7 +32,7 @@
   },
   {
    "src": "股價（yfinance）",
-   "last": "2026-11-13",
+   "last": "2026-11-16",
    "lag": 0,
    "n": 1209,
    "st": "正常",
@@ -50,7 +50,7 @@
   },
   {
    "src": "基準 0050",
-   "last": "2026-11-13",
+   "last": "2026-11-16",
    "lag": 0,
    "n": null,
    "st": "正常",
