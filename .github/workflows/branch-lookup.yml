@@ -54,7 +54,7 @@ jobs:
                   if code and nm:
                       # 清單裡含英文字母的分點代號已經是編碼後的形式（0039003600310043 = 961C），不可再編一次
                       if re.fullmatch(r'(?:00[0-9A-Fa-f]{2}){4,}', code):
-                          b = code.upper(); shown = ''.join(chr(int(b[i:i + 4], 16)) for i in range(0, len(b), 4))
+                          b = code; shown = ''.join(chr(int(b[i:i + 4], 16)) for i in range(0, len(b), 4))   # 原樣使用，不改大小寫
                       else:
                           b = code if code.isdigit() else ''.join(f'{ord(ch):04X}' for ch in code); shown = code
                       if (a, shown, nm) not in seen_rows:
