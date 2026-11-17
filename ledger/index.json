@@ -27,5 +27,15 @@
 "ver": "V1.9-liq300",
 "sig": "d3e2cca9",
 "final": false
+},
+"2026-11-17": {
+"at": "2026-11-18 06:49",
+"cov": 5,
+"nbr": 5,
+"n": 296,
+"pcov": 0.999,
+"ver": "V1.9-liq300",
+"sig": "d3e2cca9",
+"final": false
 }
 }
