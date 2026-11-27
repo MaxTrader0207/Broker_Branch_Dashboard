@@ -97,5 +97,15 @@
 "ver": "V1.9-liq300",
 "sig": "d3e2cca9",
 "final": false
+},
+"2026-11-27": {
+"at": "2026-11-28 07:06",
+"cov": 5,
+"nbr": 5,
+"n": 298,
+"pcov": 0.999,
+"ver": "V1.9-liq300",
+"sig": "d3e2cca9",
+"final": false
 }
 }
